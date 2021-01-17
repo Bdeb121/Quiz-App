@@ -1,95 +1,754 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&display=swap" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet">
+    <style>
+        /* variable */
+        :root {
+            --bg-P: #0984e3; /* #009688   #1B9CFC  #0984e3 #6c5ce7*/
+            --bg-S: #b9ddff; /* #74b9ff */
+            --bg-T: #74b9ff;
+
+            --bg-R: #00b894;
+            --bg-W: #e74c3c;
+
+            --bg-0: #f8f9fc;
+            --bg-1: #f5f6fc;
+            --bg-2: #eaecf4;
+            --bg-3: #dddfeb;
+            --bg-4: #b7b9cc;
+
+            --bg-5: #858796;
+            --bg-6: #6e707e;
+            --bg-7: #5a5c69;
+            --bg-8: #3a3b45;
+            --bg-9: #090909;
+
+            --lg-1: 10px;
+            --lg-2: 20px;
+            --lg-3: 30px;
+            --lg-4: 40px;
+            --lg-5: 50px;
+            --lg-6: 60px;
+
+            --scrollbarBG: #cfd8dc;
+            --thumbBG: #90a4ae;
+        }
+        /* All selector */
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            user-select: none;
+        }
+        /* body */
+        body{
+            background: var(--bg-P);
+            /* font-family: 'Caveat', cursive; */
+            /* font-family: 'Handlee', cursive; */
+            font-family: 'Karla', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.16);
+            /* clip-path: circle(22% at 30% 20%); */
+            /* clip-path: circle(32.8% at 10% 18%); */
+            /* clip-path: circle(57.8% at 26% 18%); */
+            /* clip-path: ellipse(25% 40% at 50% 50%); */
+            /* clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%); */
+            clip-path: polygon(0 0, 75% 0, 100% 100%, 25% 100%);
+            /* clip-path: polygon(0% 0%, 50% 50%, 100% 100%); */
+            z-index: -1;
+        }
+        .btn{
+            padding: 12px 24px;
+            background-color: var(--bg-P);
+            border: none;
+            outline: none;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 18px;
+            font-family: 'Karla', sans-serif;
+            cursor: pointer;
+        }
+
+        .btn:hover{
+            box-shadow: 0 0 0 5px var(--bg-S);
+        }
+        /* Quiz Box */
+        .quiz-box{
+            margin: 30px auto;
+            max-width: 1000px;
+            height: calc(100vh - 60px);
+            padding: 30px;
+            background: var(--bg-0);
+            border-radius: 20px;
+            display: flex;
+            justify-content: start;
+            flex-direction: column;
+        }
+
+        /* Quiz Box > Quiz Header */
+        .quiz-box .quiz-header{
+            display: flex;
+            justify-content: space-between;
+            background: var(--bg-P);
+            color: var(--bg-0);
+            height: 48px;
+            border-radius: 12px 12px 0 0;
+            /* z-index: 999; */
+        }
+
+        /* Quiz Box > Quiz Header > Quiz Title + Quiz Timer */
+        .quiz-header .quiz-title,
+        .quiz-header .quiz-menu{
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .quiz-header .quiz-menu{
+            opacity: 0;
+        }
+
+        /* Quiz Box > Quiz Body */
+        .quiz-box .quiz-body{
+            display: flex;
+            /* justify-content: space-evenly; */
+            /* align-items: start; */
+            border-top: 1px solid var(--bg-7);
+            /* border-bottom: 1px solid var(--bg-7); */
+            margin-top: 6px;
+        }
+
+        /* Quiz Box > Quiz Body > Question Box */
+        .quiz-body .question-box{
+            width: 70%;
+            height: calc(100vh - 170px);
+            display: flex;
+            flex-direction: column;
+            /* padding-bottom: 10px; */
+            padding-right: 20px;
+        }
+
+        /* Quiz Box > Quiz Body > Question Box > Question Header */
+        .question-box .question-header{
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--bg-7);
+        }
+
+        .question-header .quiz-number{
+            display: flex;
+            justify-content: start;
+        }
+
+        .question-header .quiz-timer{
+            margin: 10px 0;
+            font-size: 18px;
+            line-height: 26px;
+            padding: 0 6px;
+            border-radius: 8px;
+            background: var(--bg-P);
+            color: var(--bg-0);
+        }
+        /* Quiz Box > Quiz Body > Question Box > Question Header > Question Number */
+        .question-header .question-number{
+            /* display: inline; */
+            margin: 10px;
+            padding: 0px 10px;
+            /* line-height: 24px; */
+            border: 1px solid var(--bg-9);
+            border-radius: 20px;
+        }
+
+        /* Quiz Box > Quiz Body > Question Box > Question Header > Question Number */
+        .question-header .question-right,
+        .question-header .question-wrong{
+            margin: 10px 0;
+            padding: 1px 6px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--bg-R);
+        }
+
+        /* Quiz Box > Quiz Body > Question Box > Question Header > Question Number */
+        .question-header .question-wrong{
+            color: var(--bg-W);
+        }
+
+        /* Quiz Box > Quiz Body > Question Box > Question Text*/
+        .question-box .question-text{
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 26px;
+            padding: 20px 10px;
+            padding-right: 20px;
+            text-transform: capitalize;
+        }
+
+        /* Quiz Box > Quiz Body > Question Box > Question Option*/
+        .question-box .question-option{
+            margin: 0 10px;
+            padding-right: 20px;
+            overflow: hidden;
+            overflow-y: auto;
+        } 
+
+        .question-option::-webkit-scrollbar {
+            width: 8px;
+        }
+        .question-option::-webkit-scrollbar-track {
+            background: var(--bg-S);
+            border-radius: 4px;
+        }
+        .question-option::-webkit-scrollbar-thumb {
+            background-color: var(--bg-P) ;
+            border-radius: 4px;
+            border: 2px solid var(--bg-S);
+        }
+
+        /* Quiz Box > Quiz Body > Question Box > Question Option > Option*/
+        .question-option .option{
+            padding: 15px 15px;
+            margin-bottom: 16px;
+            border: 1px solid var(--bg-4);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .question-box .question-direction{
+            width: 100%;
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            padding-top: 20px;
+            border-bottom: 1px solid var(--bg-7);
+        }
+
+        .question-direction .prev{
+            /* margin-left: 10px; */
+        }
+
+        .question-direction .next{
+            /* margin-right: 10px; */
+        }
+
+        /* Quiz Box > Quiz Body > Option Box */
+        .quiz-body .answer-box{
+            width: 30%;
+            border-left: 1px solid var(--bg-7);
+            height: calc(100vh - 170px);
+            display: flex;
+            flex-direction: column;
+            padding-left: 20px;
+            /* padding-bottom: 10px; */
+        }
+
+        .answer-box .answer-header{
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--bg-7);
+            padding: 10px 0;
+        }
+
+        .answer-header .answer-text,
+        .answer-header .answer-close{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 26px;
+            font-size: 18px;
+        }
+
+        .answer-header .answer-close{
+            margin: auto 0;
+            opacity: 0;
+        }
+
+        .answer-box .answer-instruction {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding-right: 10px;
+        }
+
+        .answer-box .correct-box,
+        .answer-box .unmarked-box,
+        .answer-box .incorrect-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 2px 0;
+        }
+
+        .answer-box .correct-box div,
+        .answer-box .unmarked-box div,
+        .answer-box .incorrect-box div {
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--bg-R);
+            border: 1px solid var(--bg-9);  
+        }
+        .answer-box .correct-box span,
+        .answer-box .unmarked-box span,
+        .answer-box .incorrect-box span {
+            font-size: 14px;
+            line-height: 26px;
+        }
+        .answer-box .unmarked-box div {
+            background: var(--bg-0);
+        }
+
+        .answer-box .incorrect-box div {
+            background: var(--bg-W);
+        }
+
+        .answer-box .answer-container {
+            padding: 10px 0;
+            overflow: hidden;
+            overflow-y: auto;
+            padding-right: 10px;
+            scroll-behavior: smooth;
+        }
+
+        .answer-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .answer-container::-webkit-scrollbar-track {
+            background: var(--bg-S);
+            border-radius: 4px;
+        }
+        .answer-container::-webkit-scrollbar-thumb {
+            background-color: var(--bg-P) ;
+            border-radius: 4px;
+            border: 2px solid var(--bg-S);
+        }
+        
+        .answer-box .answer-indicator {
+            width: 100%;
+            display: grid;
+            grid-template: '1fr 1fr 1fr 1fr';
+            grid-gap: 20px;
+            place-items: center;
+        }
+        .answer-box .answer-indicator div {
+            width: 36px;
+            height: 36px;
+            background-color: var(--bg-0);
+            border: 1px solid var(--bg-5);
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .answer-box .answer-submit{
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 10px;
+            padding-top: 20px;
+            border-bottom: 1px solid var(--bg-7);
+        }
+
+        .answer-box .answer-submit .submit{
+            width: 100%;
+        }
+        
+        
+
+        @media (max-width: 1060px) {
+            .quiz-box{
+                margin: 30px;
+            }
+        }
+
+        @media (max-width: 900px){
+            .quiz-header .quiz-menu{
+               opacity: 1;
+               cursor: pointer;
+               background: var(--bg-0);
+               color: var(--bg-P);
+               height: 28px;
+               width: 28px;
+               border-radius: 50%;
+               /* margin: 10px; */
+            }
+            .quiz-body .question-box{
+                width: 100%;
+                padding: 0;
+            }
+
+            .question-header .quiz-timer{
+                margin: 10px;
+            }
+
+            .quiz-body .answer-box{
+                position: absolute;
+                width: 300px;
+                /* right: 60px; */
+                left: -300px;
+                height: calc(100vh - 170px);
+                padding: 0 20px;
+                border-left: none;
+                display: flex;
+                flex-direction: column;
+                background: var(--bg-0);
+                z-index: 999;
+                transition: left .4s ease-in-out;
+                box-shadow: -4px 0 4px 0 rgba(0, 0, 0, 0.5);
+                border-bottom: 1px solid var(--bg-7);
+            }
+
+            .quiz-body .answer-box.active{
+                left: calc(100vw - 360px);
+            }
+
+            .answer-header .answer-close{
+                opacity: 1;
+                cursor: pointer;
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: var(--bg-P);
+                color: var(--bg-0);
+            }
+
+            .answer-box .answer-submit{
+                border-bottom: none;
+            }
+
+            .overlay{
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 100vw;
+                background: rgba(0, 0, 0, .3);
+                transition: all .3s;
+            }
+        }
+
+        @media (max-width: 600px){
+            .btn{
+                padding: 8px 16px;
+                font-size: 16px;
+                line-height: 20px;
+            }
+
+            .btn:hover{
+                box-shadow: 0 0 0 3px var(--bg-S);
+            }
+
+            .quiz-box{
+                margin: 16px;
+                padding: 16px;
+                height: calc(100vh - 32px);
+                /* width: 100vw; */
+                border-radius: 0;
+            }
+
+            .quiz-box .quiz-header{
+                height: 36px;
+                border-radius: 6px;
+            }
+
+            .quiz-header .quiz-title,
+            .quiz-header .quiz-menu{
+                font-size: 16px;
+                line-height: 20px;
+                margin: 6px;
+            }
+
+            /* .quiz-header .quiz-title{
+                margin-left: 10px;
+            } */
+
+            .quiz-header .quiz-menu{
+               height: 24px;
+               width: 24px;
+            }
+
+            .quiz-body .question-box{
+                height: calc(100vh - 80px);
+            }
+
+            .question-header .quiz-timer{
+                margin: 6px 2px;
+                font-size: 16px;
+                line-height: 22px;
+            }
+
+            .question-header .question-number{
+                margin: 6px 2px;
+                padding: 0px 6px;
+                font-size: 16px;
+                line-height: 20px;
+                border-radius: 12px;
+            }
+
+            .question-header .question-right,
+            .question-header .question-wrong{
+                margin: 6px 0px;
+                padding: 1px 6px;
+                font-size: 14px;
+                line-height: 20px;
+            }
+
+            .question-box .question-text{
+                font-size: 16px;
+                line-height: 24px;
+                padding: 16px 4px;
+                padding-right: 16px;
+            }
+
+            .question-box .question-option{
+                margin: 0 10px;
+                padding-right: 20px;
+            } 
+
+            .question-option .option{
+                padding: 8px 12px;
+                margin-bottom: 10px;
+                font-size: 14px;
+                line-height: 20px;
+                border-radius: 12px;
+                /* text-transform: lowercase; */
+            }
+
+            .question-box .question-direction{
+                padding: 20px 0 10px;
+                border-bottom: 1px solid var(--bg-7);
+            }
+
+            .quiz-body .answer-box{
+                top: 0;
+                height: 100vh;
+                padding: 16px;
+                border-bottom: none;
+                /* left: calc(100vw - 300px); */
+            }
+
+            .quiz-body .answer-box.active{
+                left: calc(100vw - 300px);
+            }
+
+            .answer-box .answer-header{
+                padding: 6px 0 8px;
+            }
+
+            .answer-header .answer-text{
+                margin-bottom: 2px;
+            }
+            .answer-header .answer-close{
+                width: 24px;
+                height: 24px;
+                margin-bottom: 2px;
+                line-height: 24px;
+                font-size: 16px;
+
+            }
+
+            .answer-box .answer-instruction {
+                padding: 0px;
+            }
+
+            .answer-box .answer-container {
+                padding: 10px 10px;
+            }
+
+            .answer-box .answer-indicator {
+                grid-template: '1fr 1fr 1fr 1fr 1fr';
+            }
+            .answer-box .answer-indicator div {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                line-height: 24px;
+                font-weight: 500;
+            }
+
+            .answer-box .answer-submit{
+                border-bottom: 1px solid var(--bg-7);
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <!-- start portion -->
-    <div class="home-box custom-box">
-        <h3>Instruction</h3>
-        <p>
-            Total no of Question:
-            <span class="total-question"></span>
-        </p>
-        <button type="button" class="btn" id="startQuiz" onclick="startQuiz()">Start Quiz</button>
+    <!-- 2. Quiz Box -->
+    <div class="quiz-box">
+        <!-- 2.1 Quiz Header -->
+        <div class="quiz-header">
+            <div class="quiz-title">Leaving World Exercise 1</div>
+            <div class="quiz-menu"> 
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+
+        <!-- 2.2 Quiz Body -->
+        <div class="quiz-body">
+            <!-- 2.2.1 Question Box -->
+            <div class="question-box">
+                <!-- 2.2.1.1 Question Number -->
+                <div class="question-header">
+                    <div class="quiz-number">
+                        <div class="question-number">Q. 12</div>
+                        <div class="question-right">+4.0</div>
+                        <div class="question-wrong">-1.0</div>
+                    </div>
+                    <div class="quiz-timer">08 : 12</div>
+                </div>
+
+                <!-- 2.2.1.2 Question Text -->
+                <div class="question-text">
+                    The term “biology” was introduced by?
+                </div>
+
+                <!-- 2.2.1.3 Question Option -->
+                <div class="question-option">
+                    <div class="option">A.&ensp;Aristotle</div>
+                    <div class="option">B.&ensp;Darwin</div>
+                    <div class="option">C.&ensp;Lamarck & Treviranus</div>
+                    <div class="option">D.&ensp;Linnaeus</div>
+                </div>
+
+                <!-- 2.2.1.4 Question Direction -->
+                <div class="question-direction">
+                    <button type="button" class="btn prev">Prev</button>
+                    <button type="button" class="btn next">Next</button> 
+                </div>
+            </div>
+
+            <!-- 2.2.2 ANswer Box -->
+            <div class="answer-box">
+
+                <div class="answer-header">
+                    <div class="answer-text">
+                        Question List
+                    </div>
+                    <div class="answer-close">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+
+                <div class="answer-instruction">
+                    <div class="correct-box">
+                        <div></div>
+                        <span>Correct</span>
+                    </div>
+                    <div class="unmarked-box">
+                        <div></div>
+                        <span>Unmarked</span>
+                    </div>
+                    <div class="incorrect-box">
+                        <div></div>
+                        <span>Incorrect</span>
+                    </div>
+                </div>
+
+                <div class="answer-container">
+                    <div class="answer-indicator">
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                        <div>6</div>
+                        <div>7</div>
+                        <div>8</div>
+                        <div>9</div>
+                        <div>10</div>
+                        <div>11</div>
+                        <div>12</div>
+                        <div>13</div>
+                        <div>14</div>
+                        <div>15</div>
+                        <div>16</div>
+                        <div>17</div>
+                        <div>18</div>
+                        <div>19</div>
+                        <div>20</div>
+                        <div>21</div>
+                        <div>22</div>
+                        <div>23</div>
+                        <div>24</div>
+                        <div>25</div>
+                        <div>26</div>
+                        <div>27</div>
+                        <div>28</div>
+                        <div>29</div>
+                        <div>30</div>
+                        <div>31</div>
+                        <div>32</div>
+                        <div>33</div>
+                        <div>34</div>
+                        <div>35</div>
+                        <div>36</div>
+                        <div>37</div>
+                        <div>38</div>
+                        <div>39</div>
+                        <div>40</div>
+                    </div>
+                </div>
+
+                <div class="answer-submit">
+                    <button type="button" class="btn submit">Submit</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 2.3 Quiz Bottom -->
+        <div class="quiz-footer"></div>
     </div>
 
-    <!-- Quiz portion -->
-    <div class="quiz-box custom-box hide">
-        <div class="question-number">
-            <!-- Question 1 of 5 -->
-        </div>
+    <!-- 3. Overlay -->
+    <div id="overlay"></div>
 
-        <div class="question-text">
-            <!-- Which month comes right before june? -->
-        </div>
 
-        <div class="option-container">
-            <!-- <div class="option">July</div>
-            <div class="option">May</div>
-            <div class="option">September</div>
-            <div class="option">August</div> -->
-        </div>
+    <script>
+        let menu = document.querySelector('.quiz-menu');
+        let shut = document.querySelector('.answer-close');
+        let side = document.querySelector('.answer-box');
+        let over = document.querySelector('#overlay');
 
-        <div class="next-question-btn">
-            <button type="button" class="btn" id="next" onclick="next()">Next</button>
-        </div>
+        menu.addEventListener('click', function() {
+            side.classList.add('active');
+            over.classList.add('overlay');
+        });
 
-        <div class="answers-indicator">
-            <!-- <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div> -->
-        </div>
-    </div>
+        shut.addEventListener('click', function() {
+            side.classList.remove('active');
+            over.classList.remove('overlay');
+        });
+    </script>
 
-    <!-- Result portion -->
-    <div class="result-box custom-box hide">
-        <h1>Quiz Result</h1>
-        <table>
-            <tr>
-                <td>Total Questions</td>
-                <td><span class="total-question"></span></td>
-            </tr>
-
-            <tr>
-                <td>Total Attempt</td>
-                <td><span class="total-attempt"></span></td>
-            </tr>
-
-            <tr>
-                <td>Total Correct</td>
-                <td><span class="total-correct"></span></td>
-            </tr>
-
-            <tr>
-                <td>Total Wrong</td>
-                <td><span class="total-wrong"></span></td>
-            </tr>
-
-            <tr>
-                <td>Total Percentage</td>
-                <td><span class="total-percentage"></span></td>
-            </tr>
-
-            <tr>
-                <td>Total Score</td>
-                <td><span class="total-score"></span></td>
-            </tr>
-        </table>
-
-        <button type="button" class="btn" id="tryAgain" onclick="tryAgain()">Try Again</button>
-        <button type="button" class="btn" id="goToHome" onclick="goToHome()">Go to Home</button>
-    </div>
-
-    <script src="question.js"></script>
-    <script src="app.js"></script>
 </body>
-
 </html>
